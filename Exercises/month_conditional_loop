@@ -5,13 +5,47 @@ month=$1
 if [ -z $month ]
 then
    echo 'Invalid month number'
-   exit 1
-  
-   
+   exit 1   
 fi
 
 if [[ $month -lt 1 || $month -gt 12 ]]
 then
    echo 'Write number between 1..12'
+elif [ $month -eq 1 ]
+then
+    echo "January"  
+elif [ $month -eq 2 ]
+then
+    echo "February"
+elif [ $month -eq 3 ]
+then
+    echo "March"            
+elif [ $month -eq 4 ]
+then
+    echo "April"  
+elif [ $month -eq 5 ]
+then
+    echo "May"  
+elif [ $month -eq 6 ]
+then
+    echo "June"  
+elif [ $month -eq 7 ]
+then
+    echo "July"  
+elif [ $month -eq 8 ]
+then
+    echo "August"
+elif [ $month -eq 9 ]
+then
+    echo "September"
+elif [ $month -eq 10 ]
+then
+    echo "October"  
+elif [ $month -eq 11 ]
+then
+    echo "November"  
+elif [ $month -eq 12 ]
+then
+    echo "December"                      
 fi   
    
