@@ -1,0 +1,17 @@
+#!/bin/bash
+
+month=$1
+
+if [ -z $month ]
+then
+   echo 'Invalid month number'
+   exit 1
+  
+   
+fi
+
+if [[ $month -lt 1 || $month -gt 12 ]]
+then
+   echo 'Write number between 1..12'
+fi   
+   
