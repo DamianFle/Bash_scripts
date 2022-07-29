@@ -13,7 +13,7 @@
 #
 #Marketing 20 10 30
 
-for app in $(cat  apps.txt)
+for app in $(cat /tmp/assets/apps.txt)
 do
 echo -e " Log name   \t      GET      \t      POST    \t   DELETE "
 echo -e "------------------------------------------------------------"
