@@ -1,0 +1,81 @@
+#!/bin/env bash
+function information () {
+   echo 'Thanks for chose!'
+   echo 'Information below'
+   echo '------------------'
+   
+}
+function greenColor () {
+    GREEN="\033[0;32m"
+    ENDCOLOR="\033[0m"
+    echo -e "${GREEN} $1 ${ENDCOLOR}"
+    
+}
+
+function redColor () {
+    RED="\e[31m"
+    ENDCOLOR="\e[0m"
+    echo -e "${RED} $1 ${ENDCOLOR}"
+}
+
+echo 'What you want to check?'
+   echo 'Select appropriate option:'
+   echo '1) Check hostname'
+   echo '2) Check kernel version'
+   echo '3) Check ip address'
+   echo '4) Check memory'
+   echo '5) Check listening port'
+   echo '6) Check space in your home directory'
+   echo '--------------------------'
+   read choseOption
+
+while true
+do
+   case $choseOption in
+
+   1)  
+        information
+        greenColor $(echo 'Hostname:')       
+        hostInfo=${HOSTNAME}
+        greenColor $hostInfo
+        bash check_information_about_system
+         ;;
+        
+   2)
+        information
+        greenColor $(echo 'Kernel:') 
+        kerenVer=$(uname -a | awk '{ print $3}')
+        greenColor $kerenVer
+        bash check_information_about_system
+         ;;
+         
+   3)
+        information
+        greenColor $(echo "Network adapters and IP:")
+        IPAddAndNetAdap=$(ip a | grep 'eth[0-10]')
+        greenColor $IPAddAndNetAdap
+        bash check_information_about_system
+         ;;
+  
+   4) information
+        greenColor $(echo 'Free:')
+        FreeMem=$(free -hm | awk '{ print $7 }')
+        greenColor $FreeMem
+        redColor $(echo "Used:")
+        UsedMem=$(free -hm | awk '{ print $3 }' | head -n 2 | tail -n -1)
+        redColor $UsedMem
+        bash check_information_about_system
+         ;;
+   5) information
+        listeningPorts=$(ss -ntau)
+        redColor $listeningPorts
+        bash check_information_about_system
+         ;;
+   6) information
+        spaceHO=$(du -d 0 -h ~)
+        greenColor $spaceHO
+        bash check_information_about_system
+         ;;
+
+   esac
+done
