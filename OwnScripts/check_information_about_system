@@ -8,26 +8,27 @@ function information () {
 function greenColor () {
     GREEN="\033[0;32m"
     ENDCOLOR="\033[0m"
-    echo -e "${GREEN} $1 ${ENDCOLOR}"
+    echo -e "${GREEN} $* \t ${ENDCOLOR}"
     
 }
 
 function redColor () {
     RED="\e[31m"
     ENDCOLOR="\e[0m"
-    echo -e "${RED} $1 ${ENDCOLOR}"
+    echo -e "${RED} $* \t ${ENDCOLOR}"
 }
-
+echo ''
 echo 'What you want to check?'
-   echo 'Select appropriate option:'
-   echo '1) Check hostname'
-   echo '2) Check kernel version'
-   echo '3) Check ip address'
-   echo '4) Check memory'
-   echo '5) Check listening port'
-   echo '6) Check space in your home directory'
-   echo '--------------------------'
-   read choseOption
+echo 'Select appropriate option:'
+echo '1) Check hostname'
+echo '2) Check kernel version'
+echo '3) Check ip address'
+echo '4) Check memory'
+echo '5) Check listening port'
+echo '6) Check space in your home directory'
+echo '--------------------------'
+read choseOption
+echo ''
 
 while true
 do
@@ -35,47 +36,53 @@ do
 
    1)  
         information
-        greenColor $(echo 'Hostname:')       
         hostInfo=${HOSTNAME}
-        greenColor $hostInfo
+        greenColor 'Hostname:' $hostInfo       
         bash check_information_about_system
          ;;
         
    2)
         information
-        greenColor $(echo 'Kernel:') 
-        kerenVer=$(uname -a | awk '{ print $3}')
-        greenColor $kerenVer
+        kernelVer=$(uname -a | awk '{ print $3}')
+        greenColor 'Kernel:' $kernelVer
         bash check_information_about_system
          ;;
          
    3)
         information
-        greenColor $(echo "Network adapters and IP:")
-        IPAddAndNetAdap=$(ip a | grep 'eth[0-10]')
-        greenColor $IPAddAndNetAdap
+        greenColor "Network adapters and their IP:"
+        redColor "NIC \t IP"
+        IPAdd=$(ip a | grep 'eth[0-9]' | awk 'FNR == 2 { print $2 }')
+        NetAdapter=$(ip a | grep 'eth[0-10]' | awk 'FNR == 1 { print $2 }')
+        greenColor $NetAdapter "\t" $IPAdd 
         bash check_information_about_system
          ;;
   
    4) information
-        greenColor $(echo 'Free:')
+        greenColor "Free memory:"  
         FreeMem=$(free -hm | awk '{ print $7 }')
         greenColor $FreeMem
-        redColor $(echo "Used:")
+        echo "============="
+        redColor "Used memory:"
         UsedMem=$(free -hm | awk '{ print $3 }' | head -n 2 | tail -n -1)
         redColor $UsedMem
         bash check_information_about_system
          ;;
    5) information
-        listeningPorts=$(ss -ntau)
+        greenColor "Protocol State Local Address:Port  Peer Address:PortProcess"
+        listeningPorts=$( ss -ntau | grep "LISTEN" | awk ' { print $1 " | " $2 " | " $5 " | " $6 } ')
         redColor $listeningPorts
         bash check_information_about_system
          ;;
    6) information
         spaceHO=$(du -d 0 -h ~)
-        greenColor $spaceHO
+        greenColor Your home directory has: $spaceHO
         bash check_information_about_system
          ;;
+   *) 
+      redColor "Wrong number!!"
+      bash check_information_about_system 
+      ;;
 
    esac
 done
