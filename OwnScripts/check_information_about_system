@@ -1,7 +1,8 @@
 #!/bin/env bash
 function information () {
-   echo 'Thanks for chose!'
-   echo 'Information below'
+   echo ''
+   echo '------------------'
+   echo 'Information from your command:'
    echo '------------------'
    
 }
@@ -27,7 +28,8 @@ echo '4) Check memory'
 echo '5) Check listening port'
 echo '6) Check space in your home directory'
 echo '--------------------------'
-read choseOption
+read -p "Write here your number: " choseOption
+echo '--------------------------'
 echo ''
 
 while true
@@ -60,23 +62,30 @@ do
   
    4) information
         greenColor "Free memory:"  
-        FreeMem=$(free -hm | awk '{ print $7 }')
+        FreeMem=$(free -hm | awk ' FNR == 2 { print $7 }')
         greenColor $FreeMem
         echo "============="
         redColor "Used memory:"
-        UsedMem=$(free -hm | awk '{ print $3 }' | head -n 2 | tail -n -1)
+        UsedMem=$(free -hm | awk ' FNR == 2 { print $3 }')
         redColor $UsedMem
         bash check_information_about_system
          ;;
    5) information
         greenColor "Protocol State Local Address:Port  Peer Address:PortProcess"
         listeningPorts=$( ss -ntau | grep "LISTEN" | awk ' { print $1 " | " $2 " | " $5 " | " $6 } ')
+        if [ -z "$listeningPorts" ]
+        then
+           redColor "You don't have listening port"
+           break
+        else   
         redColor $listeningPorts
+        break
         bash check_information_about_system
+        fi
          ;;
    6) information
         spaceHO=$(du -d 0 -h ~)
-        greenColor Your home directory has: $spaceHO
+        greenColor "Your home directory has:" $spaceHO
         bash check_information_about_system
          ;;
    *) 
